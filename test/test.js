@@ -4,6 +4,14 @@ var addClass = className.addClass;
 
 describe('addClass', function() {
 	
+	before(function(){
+    	console.log('this function is run ONCE only')
+  	});
+
+  	beforeEach(function(){
+    	console.log('this function is run EACH time')
+  	})
+
 	it('should add class to element', function() {
     	
     	var element = { className: '' };
