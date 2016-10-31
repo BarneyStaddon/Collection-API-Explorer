@@ -1,7 +1,7 @@
 {
   "name": "apiexplorer",
   "version": "1.0.0",
-  "description": "An basic UX to explore the Musuem of London collections API",
+  "description": "A basic UX to explore a musuem collections API",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
