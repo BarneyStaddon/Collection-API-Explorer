@@ -4,11 +4,13 @@
   "description": "An basic UX to explore the Musuem of London collections API",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha"
   },
   "author": "Barney Staddon",
   "license": "ISC",
   "devDependencies": {
-    "express": "^4.14.0"
+    "chai": "^3.5.0",
+    "express": "^4.14.0",
+    "mocha": "^3.1.2"
   }
 }
