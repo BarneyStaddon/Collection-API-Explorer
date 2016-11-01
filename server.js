@@ -84,13 +84,27 @@ app.post('/api/search', function(req, res) {
 	//var term = req.body.term;
 
 	//res.json(req.body);
+	let apiHost = 'fe01.museumoflondon.org.uk';
+	let params = '';
+	let facetFields = ['section', 'makerString', 'borough', 'currentLocation'];
+	let objectSearchParams = `?json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:("object")+AND+-type:("context+item")+AND+type:("object")&rows=30&start=0&wt=json`; 
+	let facetParams = `?facet=true&facet.field=${facetFields[0]}&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json`;
+	
+	//section (Section) facet select?facet=true&facet.field=section&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
+	//maker (Artist maker) facet select?facet=true&facet.field=makerString&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
+	//borough (place) facet select?facet=true&facet.field=borough&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
+	//location (location) facet select?facet=true&facet.field=currentLocation&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
+
+	//params = objectSearchParams;
+	params = facetParams;
+
 
 	// options for GET
-	var options = {
-    	host : 'fe01.museumoflondon.org.uk', // here only the domain name
+	let options = {
+    	host : apiHost, // here only the domain name
     	// (no http/https !)
     	port : 80,
-    	path : '/solr/mol/select?q=borough:Camden&wt=json', // the rest of the url with parameters if needed
+    	path : '/solr/mol/select' + params,
     	method : 'GET', // do GET
     	headers: {
         	'Content-Type': 'application/json'
@@ -104,7 +118,7 @@ app.post('/api/search', function(req, res) {
 		//return { result : result };
 		//res.render('pages/index', { results : result.response.docs });
 
-		res.json({ results : result.response.docs });
+		res.json({ results : result.response.numFound });
 
 	});
 
