@@ -18,6 +18,7 @@ var express = require('express'); //node framework
 var bodyParser = require('body-parser'); //helps pull post content from http requests
 var app = express(); //define app using express
 var utils = require('./utils');
+var facetResults = [];
 
 //__dirname global of directory this script runs from 
 //path.join creates a path string out of all values passed in
@@ -81,44 +82,43 @@ app.post('/api/search', function(req, res) {
 
 	console.log('search endpont term: ' + req.body.term);
 
-	//var term = req.body.term;
-
 	//res.json(req.body);
-	let apiHost = 'fe01.museumoflondon.org.uk';
+	const apiHost = 'fe01.museumoflondon.org.uk';
+	const path = '/solr/mol/select';
 	let params = '';
 	let facetFields = ['section', 'makerString', 'borough', 'currentLocation'];
+	let facetIndex = 0;
 	let objectSearchParams = `?json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:("object")+AND+-type:("context+item")+AND+type:("object")&rows=30&start=0&wt=json`; 
-	let facetParams = `?facet=true&facet.field=${facetFields[0]}&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json`;
-	
-	//section (Section) facet select?facet=true&facet.field=section&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
-	//maker (Artist maker) facet select?facet=true&facet.field=makerString&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
-	//borough (place) facet select?facet=true&facet.field=borough&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
-	//location (location) facet select?facet=true&facet.field=currentLocation&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json
+	let facetParams = `?facet=true&facet.field=${facetFields[facetIndex]}&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json`;
 
 	//params = objectSearchParams;
 	params = facetParams;
 
-
 	// options for GET
 	let options = {
-    	host : apiHost, // here only the domain name
-    	// (no http/https !)
+    	host : apiHost,
     	port : 80,
-    	path : '/solr/mol/select' + params,
+    	path : path + params,
     	method : 'GET', // do GET
-    	headers: {
-        	'Content-Type': 'application/json'
-    	}
+    	headers: { 'Content-Type': 'application/json'}
 	};
 
 	// pass options and a callback to handle the result
 	utils.getJSON(options, (statusCode, result) => {
 
 		console.log("statusCode:" + statusCode);
-		//return { result : result };
 		//res.render('pages/index', { results : result.response.docs });
+		res.json({ result : result.response.numFound });
 
-		res.json({ results : result.response.numFound });
+		/* TO DO 
+
+		ADD THIS NUMBER TO AN ARRAY ON NODE
+
+
+		*/
+
+
+		//facetResults.push({ section : result.response.numFound });
 
 	});
 
