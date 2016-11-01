@@ -1,12 +1,16 @@
 
 
-var SearchForm = React.createClass({
+class SearchForm extends React.Component {
 
     //getInitialState() executes exactly once during the lifecycle of the component and sets up the initial state of the component
+    //or we can use super in a class
     //see for usage - http://stackoverflow.com/questions/30668326/what-is-the-difference-between-using-constructor-vs-getinitialstate-in-react-r
-    getInitialState () {
-        return {term: ''};
-    },
+    
+    constructor(props){
+
+        super(props);
+        this.state = {term:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+    }
 
     //N.B this is 'shorthand' syntax for:
     //handleSubmit: function(e) {}
@@ -17,26 +21,26 @@ var SearchForm = React.createClass({
         
         if (!term) return;
                 
-        console.log('term');
+        console.log(term);
 
         //this.props.onCommentSubmit({author: author, text: text});
         //this.setState({term: '');
 
-    },
+    }
 
-    handleTermChange (e) {
+    handleTermChange(e) {
 
         //this effectively sets the value in the field
         this.setState({term: e.target.value});
 
-    },
+    }
 
-    render () {
+    render() {
 
         return (
 
-            <form className="searchForm" onSubmit={this.handleSubmit}>
-                <input type="text" placeholder="Enter a search term"  value={this.state.term} onChange={this.handleTermChange} />
+            <form className="searchForm" onSubmit={this.handleSubmit.bind(this)}>
+                <input type="text" placeholder="Enter a search term"  value={this.state.term} onChange={this.handleTermChange.bind(this)} />
                 <input type="submit" value="Post" />
             </form>
 
@@ -44,7 +48,7 @@ var SearchForm = React.createClass({
 
     }
 
-});
+};
 
 
 class SearchContainer extends React.Component {
