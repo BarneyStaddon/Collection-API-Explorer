@@ -10,11 +10,11 @@ class SearchForm extends React.Component {
 
         super(props);
         this.state = {term:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
-    }
+    };
 
     //N.B this is 'shorthand' syntax for:
     //handleSubmit: function(e) {}
-    handleSubmit (e) {
+    handleSubmit(e) {
 
         e.preventDefault();
         var term = this.state.term.trim();
@@ -23,17 +23,15 @@ class SearchForm extends React.Component {
                 
         console.log(term);
 
-        //this.props.onCommentSubmit({author: author, text: text});
-        //this.setState({term: '');
+        this.props.onTermSubmit({term: term});
 
-    }
+    };
 
     handleTermChange(e) {
 
-        //this effectively sets the value in the field
+        //sets the value in the field
         this.setState({term: e.target.value});
-
-    }
+    };
 
     render() {
 
@@ -46,21 +44,44 @@ class SearchForm extends React.Component {
 
         );
 
-    }
+    };
 
 };
 
 
 class SearchContainer extends React.Component {
 
+    handleTermSubmit(searchObject){
+
+        console.log('Term submitted:' + searchObject.term);
+
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: searchObject,
+            success: function(data) {
+
+                console.log(data);
+
+                    //this.setState({data: data});
+                }.bind(this),
+            error: function(xhr, status, err) {
+                    //this.setState({data: comments});
+                    //console.error(this.props.url, status, err.toString());
+                }.bind(this)
+        });
+    
+    };
+
     render() {
       return (  
         <div className="searchContainer">  
             <h1>{this.props.title}</h1>
-            <SearchForm/>
+            <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
         </div>
       );
-    }
+    };
 };
 
 
@@ -69,6 +90,6 @@ class SearchContainer extends React.Component {
 
 //instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 ReactDOM.render(
-    <SearchContainer title="API Explorer"/>,
+    <SearchContainer title="API Explorer" url="/api/search" />,
     document.getElementById('content')
   );

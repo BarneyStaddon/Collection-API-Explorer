@@ -10,11 +10,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+ "use strict";
+
 var fs = require('fs');
 var path = require('path'); //node core mod https://nodejs.org/api/path.html
 var express = require('express'); //node framework
 var bodyParser = require('body-parser'); //helps pull post content from http requests
 var app = express(); //define app using express
+var utils = require('./utils');
 
 //__dirname global of directory this script runs from 
 //path.join creates a path string out of all values passed in
@@ -70,6 +73,43 @@ app.get('/api/comments', function(req, res) {
 		res.json(JSON.parse(data));
   	});
 });
+
+
+//on a post request
+app.post('/api/search', function(req, res) {
+
+
+	console.log('search endpont term: ' + req.body.term);
+
+	//var term = req.body.term;
+
+	//res.json(req.body);
+
+	// options for GET
+	var options = {
+    	host : 'fe01.museumoflondon.org.uk', // here only the domain name
+    	// (no http/https !)
+    	port : 80,
+    	path : '/solr/mol/select?q=borough:Camden&wt=json', // the rest of the url with parameters if needed
+    	method : 'GET', // do GET
+    	headers: {
+        	'Content-Type': 'application/json'
+    	}
+	};
+
+	// pass options and a callback to handle the result
+	utils.getJSON(options, (statusCode, result) => {
+
+		console.log("statusCode:" + statusCode);
+		//return { result : result };
+		//res.render('pages/index', { results : result.response.docs });
+
+		res.json({ results : result.response.docs });
+
+	});
+
+});
+
 
 //on a post request
 app.post('/api/comments', function(req, res) {
