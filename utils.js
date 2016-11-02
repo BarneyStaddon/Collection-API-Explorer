@@ -1,4 +1,4 @@
-const async = require('async');
+
 const request = require('request');
 
 exports.getJSON = (url, callback) => {

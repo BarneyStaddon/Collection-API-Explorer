@@ -12,12 +12,13 @@
 
  "use strict";
 
-var fs = require('fs');
-var path = require('path'); //node core mod https://nodejs.org/api/path.html
-var express = require('express'); //node framework
-var bodyParser = require('body-parser'); //helps pull post content from http requests
-var app = express(); //define app using express
-var utils = require('./utils');
+const fs = require('fs');
+const path = require('path'); //node core mod https://nodejs.org/api/path.html
+const express = require('express'); //node framework
+const bodyParser = require('body-parser'); //helps pull post content from http requests
+const utils = require('./utils');
+const async = require('async');
+const app = express(); //define app using express
 var facetResults = [];
 
 //__dirname global of directory this script runs from 
@@ -79,37 +80,24 @@ app.get('/api/comments', function(req, res) {
 //on a post request
 app.post('/api/search', function(req, res) {
 
-
-	console.log('search endpont term: ' + req.body.term);
-
-	//res.json(req.body);
-	const apiHost = 'fe01.museumoflondon.org.uk';
-	const path = '/solr/mol/select';
-	let params = '';
-	let facetFields = ['section', 'makerString', 'borough', 'currentLocation'];
-	let facetIndex = 0;
+	//build initial urls
+	const apiPath = 'http://fe01.museumoflondon.org.uk/solr/mol/select';
 	let objectSearchParams = `?json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:("object")+AND+-type:("context+item")+AND+type:("object")&rows=30&start=0&wt=json`; 
-	let facetParams = `?facet=true&facet.field=${facetFields[facetIndex]}&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json`;
+	let facetEndParams = `&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(${req.body.term}))+OR+(primaryTitle:(${req.body.term})%5E5+OR+text:(${req.body.term}))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)&rows=0&start=0&wt=json`;
+	let facetParams = `?facet=true&facet.field=`;
 
-	//params = objectSearchParams;
-	params = facetParams;
+	let urls = [ 	apiPath + objectSearchParams,
+				 	apiPath + facetParams + 'section' + facetEndParams,
+				 	apiPath + facetParams + 'makerString' + facetEndParams,
+				 	apiPath + facetParams + 'borough' + facetEndParams,
+				 	apiPath + facetParams + 'currentLocation' + facetEndParams
+				];
 
-	var wholeURL = 'http://' + apiHost + path + objectSearchParams;
-
-	// options for GET
-	let options = {
-    	host : apiHost,
-    	port : 80,
-    	path : path + params,
-    	method : 'GET', // do GET
-    	headers: { 'Content-Type': 'application/json'}
-	};
-
-	// pass options and a callback to handle the result
-	utils.getJSON(wholeURL, (error, result) => {
-
-		res.json({ result : result.response.numFound });
-	});
+	//http://caolan.github.io/async/docs.html#map
+	async.map(urls, utils.getJSON, function (err, response){
+		if (err) return console.log(err);
+		res.json(response);
+	}); 
 
 });
 
