@@ -59,25 +59,8 @@ app.use(function(req, res, next) {
 	next();
 });
 
-//on a get request
-app.get('/api/comments', function(req, res) {
-  	
-	//read the file
-  	fs.readFile(COMMENTS_FILE, function(err, data) {
-		
-		//handle any errors
-		if (err) {
-	  		console.error(err);
-	  		process.exit(1);
-		}
 
-		//send the response as json
-		res.json(JSON.parse(data));
-  	});
-});
-
-
-//on a post request
+//initial term search
 app.post('/api/search', function(req, res) {
 
 	//build initial urls
@@ -95,10 +78,19 @@ app.post('/api/search', function(req, res) {
 
 	//http://caolan.github.io/async/docs.html#map
 	async.map(urls, utils.getJSON, function (err, response){
+		
 		if (err) return console.log(err);
-		res.json(response);
-	}); 
+		
 
+		console.log()
+
+		let objectResults = response.splice(0,1),
+		facetResults = response;
+
+		res.json([	objectResults,
+					facetResults	]
+				);
+	}); 
 });
 
 

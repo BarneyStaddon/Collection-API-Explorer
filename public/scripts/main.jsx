@@ -49,7 +49,39 @@ class SearchForm extends React.Component {
 };
 
 
+class FacetResultList extends React.Component {
+
+
+    render() {
+
+
+        return (
+            <ul className="facetResultList">
+                <FacetResultItem numberFound={300} />
+            </ul>
+        );
+    };
+}; 
+
+
+class FacetResultItem extends React.Component {
+
+    render() {
+
+        return (
+            <li className="facetResultItem" >{this.props.numberFound}</li>
+        );
+    };
+};
+
+
 class SearchContainer extends React.Component {
+
+    constructor(props){
+
+        super(props);
+        this.state = {data:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+    };
 
     handleTermSubmit(searchObject){
 
@@ -60,12 +92,17 @@ class SearchContainer extends React.Component {
             dataType: 'json',
             type: 'POST',
             data: searchObject,
+            
             success: function(data) {
 
+                console.log('this is our data');
                 console.log(data);
 
-                    //this.setState({data: data});
+                //jsut use the facet results at the moment...
+                this.setState({data: data[1]});
+                
                 }.bind(this),
+            
             error: function(xhr, status, err) {
                     //this.setState({data: comments});
                     //console.error(this.props.url, status, err.toString());
@@ -75,12 +112,13 @@ class SearchContainer extends React.Component {
     };
 
     render() {
-      return (  
-        <div className="searchContainer">  
-            <h1>{this.props.title}</h1>
-            <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
-        </div>
-      );
+        return (  
+            <div className="searchContainer">  
+                <h1>{this.props.title}</h1>
+                <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
+                <FacetResultList data={this.state.data} />
+            </div>
+        );
     };
 };
 
