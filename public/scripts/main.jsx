@@ -1,15 +1,12 @@
 
 
 class SearchForm extends React.Component {
-
-    //getInitialState() executes exactly once during the lifecycle of the component and sets up the initial state of the component
-    //or we can use super in a class
-    //see for usage - http://stackoverflow.com/questions/30668326/what-is-the-difference-between-using-constructor-vs-getinitialstate-in-react-r
     
     constructor(props){
 
         super(props);
-        this.state = {term:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+        //N.B we need state here an input is an 'uncontrolled' component
+        this.state = {term:''}; 
     };
 
     //N.B this is 'shorthand' syntax for:
@@ -20,9 +17,6 @@ class SearchForm extends React.Component {
         var term = this.state.term.trim();
         
         if (!term) return;
-                
-        console.log(term);
-
         this.props.onTermSubmit({term: term});
 
     };
@@ -37,9 +31,13 @@ class SearchForm extends React.Component {
 
         return (
 
-            <form className="searchForm" onSubmit={this.handleSubmit.bind(this)}>
-                <input type="text" placeholder="Enter a search term"  value={this.state.term} onChange={this.handleTermChange.bind(this)} />
-                <input type="submit" value="Post" />
+            <form className="searchForm form-inline" onSubmit={this.handleSubmit.bind(this)}>
+                <div className="form-group">
+                    <label className="sr-only" htmlFor="searchTerm">Search term:</label>
+                    <input className="form-control" id="searchTerm" type="text" placeholder="Enter search term here"  value={this.state.term} onChange={this.handleTermChange.bind(this)} />
+                </div>
+                <button type="submit" className="btn btn-default">Search</button>
+
             </form>
 
         );
@@ -51,13 +49,17 @@ class SearchForm extends React.Component {
 
 class FacetResultList extends React.Component {
 
-
     render() {
 
+        function facetResultItem(facetResultObject){
+
+            //N.B facet.field will be unique
+            return <FacetResultItem item={facetResultObject} key={facetResultObject.responseHeader.params['facet.field']} />
+        };
 
         return (
-            <ul className="facetResultList">
-                <FacetResultItem numberFound={300} />
+            <ul className="facetResultList list-unstyled">
+                {this.props.data.map(facetResultItem)}
             </ul>
         );
     };
@@ -68,8 +70,29 @@ class FacetResultItem extends React.Component {
 
     render() {
 
+        let facetField = this.props.item.responseHeader.params['facet.field'];
+
         return (
-            <li className="facetResultItem" >{this.props.numberFound}</li>
+            <li className="facetResultItem">
+                <h4>{facetField}</h4>
+                <ul>
+                    <FacetResultItemList className="facetResultItemList" breakdown={this.props.item.facet_counts.facet_fields[facetField]}/>
+                </ul> 
+            </li>
+        );
+    };
+};
+
+
+class FacetResultItemList extends React.Component {
+
+    render() {
+
+        return (
+            //to do - iterate through our breakdown object to show the individual totals
+            //also - think about using the shorthand for components - see https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
+
+            <li>test</li>
         );
     };
 };
