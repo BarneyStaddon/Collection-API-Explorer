@@ -94,6 +94,8 @@ app.post('/api/search', function(req, res) {
 	//params = objectSearchParams;
 	params = facetParams;
 
+	var wholeURL = 'http://' + apiHost + path + objectSearchParams;
+
 	// options for GET
 	let options = {
     	host : apiHost,
@@ -104,21 +106,9 @@ app.post('/api/search', function(req, res) {
 	};
 
 	// pass options and a callback to handle the result
-	utils.getJSON(options, (statusCode, result) => {
+	utils.getJSON(wholeURL, (error, result) => {
 
-		console.log("statusCode:" + statusCode);
-		//res.render('pages/index', { results : result.response.docs });
 		res.json({ result : result.response.numFound });
-
-		/* TO DO 
-
-		ADD THIS NUMBER TO AN ARRAY ON NODE
-
-		*/
-
-
-		//facetResults.push({ section : result.response.numFound });
-
 	});
 
 });
