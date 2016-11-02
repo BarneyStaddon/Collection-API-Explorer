@@ -1,7 +1,24 @@
 //utils.js
 
+"use strict";
+
 var http = require("http");
 var https = require("https");
+var resultCallback;
+var responseHandler = function(res){
+        
+    var data = '';
+    
+    res.setEncoding('utf8');
+    res.on('data', (chunk) => {
+        data += chunk;
+    });
+
+    res.on('end', () => {
+        var obj = JSON.parse(data);
+        resultCallback(res.statusCode, obj);
+    });
+}
 
 
 /**
@@ -10,33 +27,16 @@ var https = require("https");
  * @param cb: callback to pass the results JSON object(s) back
  */
 exports.getJSON = (options,cb) => {  
-	
-	console.log("running getJSON");
 
-	var prot = options.port == 443 ? https : http; //use 80
+	let prot = options.port == 443 ? https : http,
+    req;
 
-	var req = prot.request(options, function(res)
-    {
-        var data = '';
-        
-        res.setEncoding('utf8');
-
-        res.on('data', (chunk) => {
-            	data += chunk;
-        });
-
-        res.on('end', () => {
-            var obj = JSON.parse(data);
-            cb(res.statusCode, obj);
-        });
-
-    });
+    resultCallback = cb;
+    req = prot.request(options,responseHandler);
 
     req.on('error', (e) => {
         //res.send('error: ' + err.message);
     });
 
     req.end();
-
-	//return { messages: ['test1', 'test2', 'test3', 'test4', 'test5', cb]  };
 };  
