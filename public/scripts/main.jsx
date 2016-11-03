@@ -84,7 +84,7 @@ class FacetResultItem extends React.Component {
         //console.log(this.props.breakdown);
         function breakdownItem(breakdownItemObject){
 
-            return <FacetResultItemList item={breakdownItemObject} key={breakdownItemObject[0]} />
+            return <FacetResultItemList item={breakdownItemObject} key={breakdownItemObject[0]} facetField={facetField} />
         };
 
         return (
@@ -105,13 +105,12 @@ class FacetResultItemList extends React.Component {
 
         e.preventDefault();
         
-        let itemName = this.props.item[0]; //i.e Medieval
+        let itemOb = {  'field' : this.props.facetField,
+                    'name'  : this.props.item[0] }
 
-        console.log('item clicked: ' + itemName);
-
-
-
-        
+        console.log(itemOb);
+        // we need to get the facet search type here, i.e section or whatever
+     
         /*
 
         var term = this.state.term.trim();
