@@ -94,6 +94,25 @@ app.post('/api/search', function(req, res) {
 });
 
 
+app.post('/api/search/facet/', function(){
+
+	/*
+
+		?json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)+AND+section:(%22Costume%22)&rows=30&start=0&wt=json
+
+		?facet=true&facet.field=section&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)+AND+section:(%22Costume%22)&rows=0&start=0&wt=json
+
+		?facet=true&facet.field=makerString&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)+AND+section:(%22Costume%22)&rows=0&start=0&wt=json
+
+		?facet=true&facet.field=borough&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)+AND+section:(%22Costume%22)&rows=0&start=0&wt=json
+
+		?facet=true&facet.field=currentLocation&facet.limit=-1&facet.mincount=1&json.nl=map&q=(idNumber:(coins))+OR+(primaryTitle:(coins)%5E5+OR+text:(coins))+AND+type:(%22object%22)+AND+-type:(%22context+item%22)+AND+type:(%22object%22)+AND+section:(%22Costume%22)&rows=0&start=0&wt=json
+
+	*/
+
+});
+
+
 //on a post request
 app.post('/api/comments', function(req, res) {
   	

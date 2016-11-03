@@ -71,12 +71,27 @@ class FacetResultItem extends React.Component {
     render() {
 
         let facetField = this.props.item.responseHeader.params['facet.field'];
+        let breakdownList = [];
+        let fieldObject = this.props.item.facet_counts.facet_fields[facetField];
+        
+        Object.keys(fieldObject).forEach(function (key) {
+            let breakdownItem = [];
+            breakdownItem.push(key);
+            breakdownItem.push(fieldObject[key]);
+            breakdownList.push(breakdownItem);
+        });
+
+        //console.log(this.props.breakdown);
+        function breakdownItem(breakdownItemObject){
+
+            return <FacetResultItemList item={breakdownItemObject} key={breakdownItemObject[0]} />
+        };
 
         return (
             <li className="facetResultItem">
                 <h4>{facetField}</h4>
                 <ul>
-                    <FacetResultItemList className="facetResultItemList" breakdown={this.props.item.facet_counts.facet_fields[facetField]}/>
+                    {breakdownList.map(breakdownItem)}
                 </ul> 
             </li>
         );
@@ -86,13 +101,32 @@ class FacetResultItem extends React.Component {
 
 class FacetResultItemList extends React.Component {
 
+    handleClick(e) {
+
+        e.preventDefault();
+        
+        let itemName = this.props.item[0]; //i.e Medieval
+
+        console.log('item clicked: ' + itemName);
+
+
+
+        
+        /*
+
+        var term = this.state.term.trim();
+    
+        if (!term) return;
+        this.props.onTermSubmit({term: term});
+
+        */
+    };
+
     render() {
 
         return (
-            //to do - iterate through our breakdown object to show the individual totals
-            //also - think about using the shorthand for components - see https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
-
-            <li>test</li>
+            //to do - think about using the shorthand for components - see https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
+            <li><a href="#" onClick={this.handleClick.bind(this)}>{this.props.item[0]}<span> ({this.props.item[1]})</span></a></li>
         );
     };
 };
