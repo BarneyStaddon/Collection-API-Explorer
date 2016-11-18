@@ -1,4 +1,5 @@
 
+//N.B can't use ES6 import, not yet implemented - to do so use webpack  
 const request = require('request');
 
 exports.getJSON = (url, callback) => {
