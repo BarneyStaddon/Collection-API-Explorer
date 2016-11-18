@@ -4,7 +4,8 @@
   "description": "A basic UX to explore a musuem collections API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "nodemon src/server.js"
   },
   "author": "Barney Staddon",
   "license": "ISC",
