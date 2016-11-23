@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 
 class SearchForm extends React.Component {
     
@@ -181,12 +182,26 @@ class SearchContainer extends React.Component {
 
 
 
+class App extends React.Component {
+
+
+    render() {
+
+        return (
+            <SearchContainer title="API Explorer" url="/api/search" />
+        );
+    };
+};
 
 
 //instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
+//history error see - https://github.com/chentsulin/electron-react-boilerplate/issues/542
 ReactDom.render(
     
-    <SearchContainer title="API Explorer" url="/api/search" />,
+    <Router history={hashHistory}>
+        <Route path="/" component={App}>
+        </Route>
+    </Router>,
     
     document.getElementById('content')
   );
