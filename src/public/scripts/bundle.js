@@ -163,9 +163,18 @@
 	            };
 	
 	            return _react2.default.createElement(
-	                'ul',
-	                { className: 'facetResultList list-unstyled' },
-	                this.props.data.map(facetResultItem)
+	                'section',
+	                null,
+	                this.props.data.length > 0 && _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Narrow by'
+	                ),
+	                _react2.default.createElement(
+	                    'ul',
+	                    { className: 'facetResultList list-unstyled' },
+	                    this.props.data.map(facetResultItem)
+	                )
 	            );
 	        }
 	    }]);
@@ -189,6 +198,7 @@
 	        value: function render() {
 	
 	            var facetField = this.props.item.responseHeader.params['facet.field'];
+	            var facetFieldCount = this.props.item.response.numFound;
 	            var breakdownList = [];
 	            var fieldObject = this.props.item.facet_counts.facet_fields[facetField];
 	
@@ -209,14 +219,18 @@
 	                'li',
 	                { className: 'facetResultItem' },
 	                _react2.default.createElement(
-	                    'h4',
+	                    'details',
 	                    null,
-	                    facetField
-	                ),
-	                _react2.default.createElement(
-	                    'ul',
-	                    null,
-	                    breakdownList.map(breakdownItem)
+	                    _react2.default.createElement(
+	                        'summary',
+	                        null,
+	                        facetField + ' (' + facetFieldCount + ')'
+	                    ),
+	                    _react2.default.createElement(
+	                        'ul',
+	                        { className: 'list-unstyled' },
+	                        breakdownList.map(breakdownItem)
+	                    )
 	                )
 	            );
 	        }
@@ -330,11 +344,6 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'searchContainer' },
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    this.props.title
-	                ),
 	                _react2.default.createElement(SearchForm, { onTermSubmit: this.handleTermSubmit.bind(this) }),
 	                _react2.default.createElement(FacetResultList, { data: this.state.data })
 	            );
@@ -359,11 +368,55 @@
 	        key: 'render',
 	        value: function render() {
 	
-	            return _react2.default.createElement(SearchContainer, { title: 'API Explorer', url: '/api/search' });
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'app' },
+	                _react2.default.createElement(
+	                    'header',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Collections API Explorer'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2.default.createElement(Home, null)
+	                ),
+	                _react2.default.createElement(
+	                    'footer',
+	                    null,
+	                    '\xA92016'
+	                )
+	            );
 	        }
 	    }]);
 	
 	    return App;
+	}(_react2.default.Component);
+	
+	;
+	
+	var Home = function (_React$Component7) {
+	    _inherits(Home, _React$Component7);
+	
+	    function Home() {
+	        _classCallCheck(this, Home);
+	
+	        return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
+	    }
+	
+	    _createClass(Home, [{
+	        key: 'render',
+	        value: function render() {
+	
+	            return _react2.default.createElement(SearchContainer, { url: '/api/search' });
+	        }
+	    }]);
+	
+	    return Home;
 	}(_react2.default.Component);
 	
 	;
@@ -374,7 +427,7 @@
 	    _reactRouter.Router,
 	    { history: _reactRouter.hashHistory },
 	    _react2.default.createElement(_reactRouter.Route, { path: '/', component: App })
-	), document.getElementById('content'));
+	), document.getElementById('container'));
 
 /***/ },
 /* 2 */

@@ -60,9 +60,12 @@ class FacetResultList extends React.Component {
         };
 
         return (
-            <ul className="facetResultList list-unstyled">
-                {this.props.data.map(facetResultItem)}
-            </ul>
+            <section>
+                {this.props.data.length > 0 && <p>Narrow by</p>}
+                <ul className="facetResultList list-unstyled">
+                    {this.props.data.map(facetResultItem)}
+                </ul>
+            </section>
         );
     };
 }; 
@@ -73,6 +76,7 @@ class FacetResultItem extends React.Component {
     render() {
 
         let facetField = this.props.item.responseHeader.params['facet.field'];
+        let facetFieldCount = this.props.item.response.numFound;
         let breakdownList = [];
         let fieldObject = this.props.item.facet_counts.facet_fields[facetField];
         
@@ -91,10 +95,12 @@ class FacetResultItem extends React.Component {
 
         return (
             <li className="facetResultItem">
-                <h4>{facetField}</h4>
-                <ul>
-                    {breakdownList.map(breakdownItem)}
-                </ul> 
+                <details>
+                    <summary>{facetField}</summary>
+                    <ul className="list-unstyled">
+                        {breakdownList.map(breakdownItem)}
+                    </ul>
+                </details>
             </li>
         );
     };
@@ -172,7 +178,6 @@ class SearchContainer extends React.Component {
     render() {
         return (  
             <div className="searchContainer">  
-                <h1>{this.props.title}</h1>
                 <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
                 <FacetResultList data={this.state.data} />
             </div>
@@ -188,7 +193,26 @@ class App extends React.Component {
     render() {
 
         return (
-            <SearchContainer title="API Explorer" url="/api/search" />
+            <div className="app">
+                <header>
+                    <h1>Collections API Explorer</h1>
+                </header>
+                <div className="content">
+                    <Home/>
+                </div>
+                <footer>&copy;2016</footer>
+            </div>
+        );
+    };
+};
+
+
+class Home extends React.Component {
+
+    render() {
+
+        return (
+            <SearchContainer url="/api/search" />
         );
     };
 };
@@ -203,5 +227,5 @@ ReactDom.render(
         </Route>
     </Router>,
     
-    document.getElementById('content')
+    document.getElementById('container')
   );
