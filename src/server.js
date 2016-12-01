@@ -19,6 +19,10 @@ const bodyParser = require('body-parser'); //helps pull post content from http r
 const utils = require('./utils');
 const async = require('async');
 const app = express(); //define app using express
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+
+
 var facetResults = [];
 
 //__dirname global of directory this script runs from 

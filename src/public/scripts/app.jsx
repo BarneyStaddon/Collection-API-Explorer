@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router'
+import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+
+
+console.log('app loaded now here');
+
 
 class SearchForm extends React.Component {
     
@@ -149,7 +153,7 @@ class SearchContainer extends React.Component {
 
     handleTermSubmit(searchObject){
 
-        console.log('Term submitted:' + searchObject.term);
+        console.log('Term submitted:' + searchObject.term );
 
         $.ajax({
             url: this.props.url,
@@ -159,7 +163,7 @@ class SearchContainer extends React.Component {
             
             success: function(data) {
 
-                console.log('this is all of our data');
+                console.log('this is all of our data now');
                 console.log(data);
 
                 //jsut use the facet results at the moment...
@@ -212,7 +216,7 @@ class Home extends React.Component {
     render() {
 
         return (
-            <SearchContainer url="/api/search" />
+            <SearchContainer url="http://localhost:3000/api/search" />
         );
     };
 };

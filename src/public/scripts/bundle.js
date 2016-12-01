@@ -78,6 +78,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	console.log('app loaded');
+	
 	var SearchForm = function (_React$Component) {
 	    _inherits(SearchForm, _React$Component);
 	
@@ -325,7 +327,7 @@
 	
 	                success: function (data) {
 	
-	                    console.log('this is all of our data');
+	                    console.log('this is all of our data now');
 	                    console.log(data);
 	
 	                    //jsut use the facet results at the moment...
@@ -412,7 +414,7 @@
 	        key: 'render',
 	        value: function render() {
 	
-	            return _react2.default.createElement(SearchContainer, { url: '/api/search' });
+	            return _react2.default.createElement(SearchContainer, { url: 'http://localhost:3000/api/search' });
 	        }
 	    }]);
 	

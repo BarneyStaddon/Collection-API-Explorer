@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "nodemon src/server.js",
-    "webpack": "webpack --config config/webpack.config.js"
+    "dev" : "webpack-dev-server --config config/webpack.config.js --content-base src/public --iinline",
+    "build": "webpack --config config/webpack.config.prod.js" 
   },
   "author": "Barney Staddon",
   "license": "ISC",

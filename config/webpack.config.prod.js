@@ -9,8 +9,7 @@ module.exports = {
     entry: './src/public/scripts/main.js',
     output: { 
                 path: buildPath, 
-                filename: 'bundle.js',
-                publicPath: '/scripts/'
+                filename: 'bundle.js'
             },
     module: {
         loaders: [
@@ -24,10 +23,6 @@ module.exports = {
             }
         ]
     },
-
-    plugins: [
-        new webpack.HotModuleReplacementPlugin()
-    ],
 
     devtool: 'source-map',
 
