@@ -224,7 +224,7 @@
 	                    _react2.default.createElement(
 	                        'summary',
 	                        null,
-	                        facetField + ' (' + facetFieldCount + ')'
+	                        facetField
 	                    ),
 	                    _react2.default.createElement(
 	                        'ul',
@@ -307,7 +307,7 @@
 	
 	        var _this5 = _possibleConstructorReturn(this, (SearchContainer.__proto__ || Object.getPrototypeOf(SearchContainer)).call(this, props));
 	
-	        _this5.state = { data: [] }; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+	        _this5.state = { facetsData: [] }; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
 	        return _this5;
 	    }
 	
@@ -325,11 +325,11 @@
 	
 	                success: function (data) {
 	
-	                    console.log('this is our data');
+	                    console.log('this is all of our data');
 	                    console.log(data);
 	
 	                    //jsut use the facet results at the moment...
-	                    this.setState({ data: data[1] });
+	                    this.setState({ facetsData: data[1] });
 	                }.bind(this),
 	
 	                error: function (xhr, status, err) {
@@ -345,7 +345,7 @@
 	                'div',
 	                { className: 'searchContainer' },
 	                _react2.default.createElement(SearchForm, { onTermSubmit: this.handleTermSubmit.bind(this) }),
-	                _react2.default.createElement(FacetResultList, { data: this.state.data })
+	                _react2.default.createElement(FacetResultList, { data: this.state.facetsData })
 	            );
 	        }
 	    }]);

@@ -144,7 +144,7 @@ class SearchContainer extends React.Component {
     constructor(props){
 
         super(props);
-        this.state = {data:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+        this.state = {facetsData:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
     };
 
     handleTermSubmit(searchObject){
@@ -159,11 +159,11 @@ class SearchContainer extends React.Component {
             
             success: function(data) {
 
-                console.log('this is our data');
+                console.log('this is all of our data');
                 console.log(data);
 
                 //jsut use the facet results at the moment...
-                this.setState({data: data[1]});
+                this.setState({facetsData: data[1]});
                 
                 }.bind(this),
             
@@ -179,7 +179,7 @@ class SearchContainer extends React.Component {
         return (  
             <div className="searchContainer">  
                 <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
-                <FacetResultList data={this.state.data} />
+                <FacetResultList data={this.state.facetsData} />
             </div>
         );
     };
