@@ -212,7 +212,7 @@ class Home extends React.Component {
     render() {
 
         return (
-            <SearchContainer url="http://localhost:3000/api/search" />
+            <SearchContainer url="/api/search" />
         );
     };
 };
