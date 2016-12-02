@@ -186,25 +186,20 @@ class SearchContainer extends React.Component {
 };
 
 
-
-class App extends React.Component {
-
+class Header extends React.Component {
 
     render() {
 
         return (
-            <div className="app">
+            <div className="header">
                 <header>
                     <h1>Collections API Explorer</h1>
                 </header>
-                <div className="content">
-                    <Home/>
-                </div>
-                <footer>&copy;2016</footer>
             </div>
         );
     };
-};
+
+}
 
 
 class Home extends React.Component {
@@ -218,12 +213,33 @@ class Home extends React.Component {
 };
 
 
+
+
+class App extends React.Component {
+
+
+    render() {
+
+        return (
+            <div className="app">
+                <Header />
+                <div className="content">
+                    {this.props.children}
+                </div>
+                <footer>&copy;2016</footer>
+            </div>
+        );
+    };
+};
+
+
 //instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 //history error see - https://github.com/chentsulin/electron-react-boilerplate/issues/542
 ReactDom.render(
     
     <Router history={hashHistory}>
         <Route path="/" component={App}>
+            <IndexRoute component={Home}/>
         </Route>
     </Router>,
     
