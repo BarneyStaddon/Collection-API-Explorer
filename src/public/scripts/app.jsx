@@ -1,6 +1,14 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, withRouter } from 'react-router';
+
+
+/* to kill a process on windows 
+cmd.exe as admin > neststat -a -n -o 
+note processid (pid)
+> taskkill /f /pid <yourpid>
+*/
+
 
 class SearchForm extends React.Component {
     
@@ -164,6 +172,10 @@ class SearchContainer extends React.Component {
 
                 //jsut use the facet results at the moment...
                 this.setState({facetsData: data[1]});
+
+
+                this.props.router.push('/results');
+
                 
                 }.bind(this),
             
@@ -183,6 +195,31 @@ class SearchContainer extends React.Component {
             </div>
         );
     };
+};
+
+
+/*
+
+http://stackoverflow.com/questions/31079081/programmatically-navigate-using-react-router
+https://www.sitepoint.com/react-higher-order-components/
+https://github.com/ReactTraining/react-router/blob/master/docs/API.md#withroutercomponent-options
+
+N.B we use an HoC to get the router as a prop of our SearchContainer component
+
+*/
+
+var WrappedSearchContainer = withRouter(SearchContainer);
+
+/* 
+
+https://facebook.github.io/react/docs/typechecking-with-proptypes.html
+prop called 'router' must be set to an object that must contain a function called 'push'   
+
+*/
+SearchContainer.propTypes = {
+    router: React.PropTypes.shape({
+        push: React.PropTypes.func.isRequired
+    }).isRequired
 };
 
 
@@ -207,7 +244,7 @@ class Home extends React.Component {
     render() {
 
         return (
-            <SearchContainer url="/api/search" />
+            <WrappedSearchContainer url="/api/search" />
         );
     };
 };
