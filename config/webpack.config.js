@@ -25,6 +25,17 @@ module.exports = {
         ]
     },
 
+
+    devServer: {
+            //https://github.com/chimurai/http-proxy-middleware
+            proxy: {
+                '/api': {
+                    target: 'http://localhost:3000',
+                    secure: false
+            }
+        }
+    },
+
     plugins: [
         new webpack.HotModuleReplacementPlugin()
     ],

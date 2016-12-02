@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
-
-console.log('app loaded now here');
-
-
 class SearchForm extends React.Component {
     
     constructor(props){
