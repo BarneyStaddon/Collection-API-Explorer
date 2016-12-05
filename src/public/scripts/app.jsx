@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute, withRouter } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, withRouter, browserHistory } from 'react-router';
 
 
 /* to kill a process on windows 
@@ -149,13 +149,8 @@ class FacetResultItemList extends React.Component {
 
 class SearchContainer extends React.Component {
 
-    constructor(props){
 
-        super(props);
-        this.state = {facetsData:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
-    };
-
-    handleTermSubmit(searchObject){
+    handleTermSubmit(searchObject) {
 
         console.log('Term submitted:' + searchObject.term );
 
@@ -167,15 +162,11 @@ class SearchContainer extends React.Component {
             
             success: function(data) {
 
-                console.log('this is all of our data now');
+                console.log('All data: ');
                 console.log(data);
 
-                //jsut use the facet results at the moment...
-                this.setState({facetsData: data[1]});
-
-
+                this.props.dataHandler(data[1]);  
                 this.props.router.push('/results');
-
                 
                 }.bind(this),
             
@@ -191,7 +182,6 @@ class SearchContainer extends React.Component {
         return (  
             <div className="searchContainer">  
                 <SearchForm onTermSubmit={this.handleTermSubmit.bind(this)}/>
-                <FacetResultList data={this.state.facetsData} />
             </div>
         );
     };
@@ -223,6 +213,25 @@ SearchContainer.propTypes = {
 };
 
 
+
+
+class ResultsContainer extends React.Component {
+
+    render() {
+
+        console.log('render our results');
+
+        return (
+            <div className="resultsContainer">
+               <FacetResultList data={this.props.facetsData} />
+            </div>
+        );
+    };
+
+}
+
+
+
 class Header extends React.Component {
 
     render() {
@@ -244,7 +253,19 @@ class Home extends React.Component {
     render() {
 
         return (
-            <WrappedSearchContainer url="/api/search" />
+            <WrappedSearchContainer dataHandler={this.props.dataHandler} url="/api/search" />
+        );
+    };
+};
+
+
+
+class Results extends React.Component {
+
+    render() {
+
+        return (
+            <ResultsContainer facetsData={this.props.resultsData} />
         );
     };
 };
@@ -254,14 +275,43 @@ class Home extends React.Component {
 
 class App extends React.Component {
 
+    constructor(props){
+
+        super(props);
+        this.state = {facetsData:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+        self = this;
+    };
+
+
+    setResultsData(data) {
+
+        console.log('Adding data to root app state...');
+        self.setState({facetsData: data});
+    };
+
+    getResultsData() {
+
+
+        //self.setState({facetsData: data[1]});
+    };
+
 
     render() {
+
+        //to add props to children - http://stackoverflow.com/questions/35835670/react-router-and-this-props-children-how-to-pass-state-to-this-props-children
+        var children = React.Children.map(this.props.children, function(child){
+            return React.cloneElement(child, {
+                dataHandler: self.setResultsData,
+                resultsData: self.state.facetsData
+            })
+
+        });
 
         return (
             <div className="app">
                 <Header />
                 <div className="content">
-                    {this.props.children}
+                    {children}
                 </div>
                 <footer>&copy;2016</footer>
             </div>
@@ -272,11 +322,13 @@ class App extends React.Component {
 
 //instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 //history error see - https://github.com/chentsulin/electron-react-boilerplate/issues/542
+//use browserHistory - https://github.com/reactjs/react-router-redux/issues/197
 ReactDom.render(
     
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Home}/>
+            <Route path="results" component={Results} />
         </Route>
     </Router>,
     
