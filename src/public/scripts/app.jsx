@@ -154,6 +154,20 @@ class SearchContainer extends React.Component {
 
         console.log('Term submitted:' + searchObject.term );
 
+
+        /*
+
+
+        TO DO:
+
+        Use this somewhere in the results layout/path
+
+
+        */ 
+
+
+        this.props.termHandler(searchObject.term); 
+
         $.ajax({
             url: this.props.url,
             dataType: 'json',
@@ -253,7 +267,7 @@ class Home extends React.Component {
     render() {
 
         return (
-            <WrappedSearchContainer dataHandler={this.props.dataHandler} url="/api/search" />
+            <WrappedSearchContainer termHandler={this.props.termHandler} dataHandler={this.props.dataHandler} url="/api/search" />
         );
     };
 };
@@ -278,7 +292,8 @@ class App extends React.Component {
     constructor(props){
 
         super(props);
-        this.state = {facetsData:[]}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+        this.state = { facetsData:[],
+                       searchTerm:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
         self = this;
     };
 
@@ -287,6 +302,12 @@ class App extends React.Component {
 
         console.log('Adding data to root app state...');
         self.setState({facetsData: data});
+    };
+
+    setSearchTerm(term) {
+
+        console.log('Setting search term to root app state...');
+        self.setState({searchTerm: term});
     };
 
     getResultsData() {
@@ -301,7 +322,9 @@ class App extends React.Component {
         //to add props to children - http://stackoverflow.com/questions/35835670/react-router-and-this-props-children-how-to-pass-state-to-this-props-children
         var children = React.Children.map(this.props.children, function(child){
             return React.cloneElement(child, {
+                termHandler: self.setSearchTerm,
                 dataHandler: self.setResultsData,
+                searchTerm: self.state.searchTerm,
                 resultsData: self.state.facetsData
             })
 
