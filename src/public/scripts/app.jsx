@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute, withRouter, browserHistory } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, withRouter, browserHistory, Link} from 'react-router';
 
 
 /* to kill a process on windows 
@@ -61,20 +61,37 @@ class FacetResultList extends React.Component {
 
     render() {
 
+        let numResults = this.props.resultsData[0][0]['response']['numFound'];
+        let resultsPerPage = this.props.resultsData[0][0]['response']['docs'].length;
+        let start = this.props.resultsData[0][0]['response']['start'];
+
         function facetResultItem(facetResultObject){
 
             //N.B facet.field will be unique
             return <FacetResultItem item={facetResultObject} key={facetResultObject.responseHeader.params['facet.field']} />
         };
+        
+        if(numResults > 0){
+
+            return (
+                <section>
+                    <h4>Showing {start} to {resultsPerPage} of {numResults} results for '{this.props.searchTerm}'</h4>
+                    <Link to="/">Search again</Link>
+                    <p>Refine</p>
+                    <ul className="facetResultList list-unstyled">
+                        {this.props.resultsData[1].map(facetResultItem)}
+                    </ul>
+                </section>
+            );
+        }
 
         return (
             <section>
-                {this.props.data.length > 0 && <p>Narrow by</p>}
-                <ul className="facetResultList list-unstyled">
-                    {this.props.data.map(facetResultItem)}
-                </ul>
+                <h4>There were no results for '{this.props.searchTerm}'</h4>
+                <Link to="/">Please try again</Link>
             </section>
         );
+  
     };
 }; 
 
@@ -95,22 +112,27 @@ class FacetResultItem extends React.Component {
             breakdownList.push(breakdownItem);
         });
 
-        //console.log(this.props.breakdown);
         function breakdownItem(breakdownItemObject){
 
             return <FacetResultItemList item={breakdownItemObject} key={breakdownItemObject[0]} facetField={facetField} />
         };
 
-        return (
-            <li className="facetResultItem">
-                <details>
-                    <summary>{facetField}</summary>
-                    <ul className="list-unstyled">
-                        {breakdownList.map(breakdownItem)}
-                    </ul>
-                </details>
-            </li>
-        );
+        if(breakdownList.length > 0){
+
+            return (
+
+                <li className="facetResultItem">
+                    <details>
+                        <summary>{facetField}</summary>
+                        <ul className="list-unstyled">
+                            {breakdownList.map(breakdownItem)}
+                        </ul>
+                    </details>
+                </li>                
+            );
+        }
+
+        return null;
     };
 };
 
@@ -179,7 +201,7 @@ class SearchContainer extends React.Component {
                 console.log('All data: ');
                 console.log(data);
 
-                this.props.dataHandler(data[1]);  
+                this.props.resultsDataHandler(data);  
                 this.props.router.push('/results');
                 
                 }.bind(this),
@@ -237,7 +259,7 @@ class ResultsContainer extends React.Component {
 
         return (
             <div className="resultsContainer">
-               <FacetResultList data={this.props.facetsData} />
+               <FacetResultList resultsData={this.props.resultsData} searchTerm={this.props.searchTerm} />
             </div>
         );
     };
@@ -267,7 +289,7 @@ class Home extends React.Component {
     render() {
 
         return (
-            <WrappedSearchContainer termHandler={this.props.termHandler} dataHandler={this.props.dataHandler} url="/api/search" />
+            <WrappedSearchContainer termHandler={this.props.termHandler} resultsDataHandler={this.props.resultsDataHandler} url="/api/search" />
         );
     };
 };
@@ -279,11 +301,10 @@ class Results extends React.Component {
     render() {
 
         return (
-            <ResultsContainer facetsData={this.props.resultsData} />
+            <ResultsContainer resultsData={this.props.resultsData} searchTerm={this.props.searchTerm} />
         );
     };
 };
-
 
 
 
@@ -292,7 +313,7 @@ class App extends React.Component {
     constructor(props){
 
         super(props);
-        this.state = { facetsData:[],
+        this.state = { resultsData:[],
                        searchTerm:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
         self = this;
     };
@@ -301,7 +322,7 @@ class App extends React.Component {
     setResultsData(data) {
 
         console.log('Adding data to root app state...');
-        self.setState({facetsData: data});
+        self.setState({resultsData: data});
     };
 
     setSearchTerm(term) {
@@ -323,9 +344,9 @@ class App extends React.Component {
         var children = React.Children.map(this.props.children, function(child){
             return React.cloneElement(child, {
                 termHandler: self.setSearchTerm,
-                dataHandler: self.setResultsData,
+                resultsDataHandler: self.setResultsData,
                 searchTerm: self.state.searchTerm,
-                resultsData: self.state.facetsData
+                resultsData: self.state.resultsData
             })
 
         });
