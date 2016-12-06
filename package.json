@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "nodemon src/server.js",
-    "start:dev" : "webpack-dev-server --config config/webpack.config.js --content-base src/public --inline",
-    "build": "webpack --config config/webpack.config.prod.js" 
+    "start:dev": "webpack-dev-server --config config/webpack.config.js --content-base src/public --inline",
+    "build": "webpack --config config/webpack.config.prod.js"
   },
   "author": "Barney Staddon",
   "license": "ISC",
@@ -25,10 +25,11 @@
     "async": "^2.1.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "flux": "^3.1.0",
+    "history": "^2.0.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
-    "request": "^2.76.0",
-    "history": "^2.0.1"
+    "request": "^2.76.0"
   }
 }

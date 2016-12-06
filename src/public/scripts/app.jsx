@@ -2,39 +2,16 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute, withRouter, browserHistory } from 'react-router';
 
+import AppDispatcher from './dispatcher/app-dispatcher.jsx';
 import ResultsContainer from './results/results-container.jsx';
 import SearchContainer from './search/search-container.jsx';
 
 
-/* to kill a process on windows 
-cmd.exe as admin > neststat -a -n -o 
-note processid (pid)
-> taskkill /f /pid <yourpid>
-*/
+//see = https://scotch.io/tutorials/creating-a-simple-shopping-cart-with-react-js-and-flux
 
 
-
-
-
-
-/*
-
-http://stackoverflow.com/questions/31079081/programmatically-navigate-using-react-router
-https://www.sitepoint.com/react-higher-order-components/
-https://github.com/ReactTraining/react-router/blob/master/docs/API.md#withroutercomponent-options
-
-N.B we use an HoC to get the router as a prop of our SearchContainer component
-
-*/
-
+//N.B we use an HoC to get the router as a prop of our SearchContainer component
 var WrappedSearchContainer = withRouter(SearchContainer);
-
-/* 
-
-https://facebook.github.io/react/docs/typechecking-with-proptypes.html
-prop called 'router' must be set to an object that must contain a function called 'push'   
-
-*/
 SearchContainer.propTypes = {
     router: React.PropTypes.shape({
         push: React.PropTypes.func.isRequired
