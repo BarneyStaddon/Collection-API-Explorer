@@ -4,10 +4,10 @@ import AppDispatcher from '../dispatcher/app-dispatcher.jsx';
 var SearchActions = {
 
   	// GET SEARCH TERM
-  	getSearchTerm: function(data) {
+  	storeSearchTerm: function(data) {
 
     	AppDispatcher.handleAction({
-      		actionType: 'GET_SEARCH_TERM',
+      		actionType: 'STORE_SEARCH_TERM',
       		data: data
     	})
   	}

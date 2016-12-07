@@ -37,7 +37,7 @@ export default class SearchContainer extends React.Component {
 
 
 
-                SearchActions.getSearchTerm(data);
+                SearchActions.storeSearchTerm(data);
 
 
                 this.props.resultsDataHandler(data);  
