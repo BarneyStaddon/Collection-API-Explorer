@@ -6,6 +6,8 @@ import AppDispatcher from './dispatcher/app-dispatcher.jsx';
 import ResultsContainer from './results/results-container.jsx';
 import SearchContainer from './search/search-container.jsx';
 
+import TermStore from './stores/term-store.jsx';
+
 
 //see = https://scotch.io/tutorials/creating-a-simple-shopping-cart-with-react-js-and-flux
 
@@ -58,17 +60,36 @@ class Results extends React.Component {
 };
 
 
-
+//Controller view
 class App extends React.Component {
 
     constructor(props){
 
+        /*
         super(props);
         this.state = { resultsData:[],
                        searchTerm:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+
+        */
+
+        super(props);
+        this.state = { resultsData:[],
+                       searchTerm: TermStore.getTerm()};
+
         self = this;
     };
 
+
+
+    // Add change listeners to stores
+    componentDidMount() {
+        TermStore.addChangeListener(this._onChange);
+    };
+
+    // Remove change listers from stores
+    componentWillUnmount() {
+        TermStore.removeChangeListener(this._onChange);
+    };
 
     setResultsData(data) {
 
@@ -83,9 +104,21 @@ class App extends React.Component {
     };
 
     getResultsData() {
-
-
         //self.setState({facetsData: data[1]});
+    };
+
+
+    _onChange() {
+
+        /* 
+            TO DO - use this when our view adds the term to the term store
+
+            Also, consider using underscore prefix on all custom methods - 
+            https://web-design-weekly.com/2015/01/29/opinionated-guide-react-js-best-practices-conventions/
+
+            //self.setState({searchTerm: TermStore.getTerm()});
+
+        */
     };
 
 
@@ -112,6 +145,7 @@ class App extends React.Component {
             </div>
         );
     };
+
 };
 
 
