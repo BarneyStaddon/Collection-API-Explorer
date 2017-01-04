@@ -74,7 +74,7 @@ class App extends React.Component {
     };
 
     // Add change listeners to stores
-    // this is run as soon as our app component is mounted
+    // run as soon as our app component is mounted
     componentDidMount() {
         TermStore.addChangeListener(this._onChange);
         ResultStore.addChangeListener(this._onChange);

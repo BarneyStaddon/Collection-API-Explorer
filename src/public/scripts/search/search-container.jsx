@@ -6,7 +6,6 @@ import SearchActions from '../actions/search-actions.jsx';
 export default class SearchContainer extends React.Component {
 
     handleTermSubmit(searchObject) {
-
         SearchActions.storeSearchTerm(searchObject.term);
         SearchActions.getSearchResults(searchObject, this.props.router.push);
     };

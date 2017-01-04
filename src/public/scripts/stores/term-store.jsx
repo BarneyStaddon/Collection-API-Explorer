@@ -43,7 +43,7 @@ AppDispatcher.register(function(payload) {
       	break;
 
     	case "SOME_OTHER_ACTIONTYPE":
-      		loadTermData(action.data);
+      		//do whatever
       	break;
 
     	default:
