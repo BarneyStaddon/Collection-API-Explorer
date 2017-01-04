@@ -9,7 +9,9 @@ var term = null;
 
 function loadTermData(data) {
 	console.log('loading some term data');
- 	term = data[0];
+ 	term = data;
+
+  console.log('term is:' + term);
 }
 
 // Add term to store

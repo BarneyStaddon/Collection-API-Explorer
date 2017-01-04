@@ -82,6 +82,7 @@ class App extends React.Component {
 
 
     // Add change listeners to stores
+    // this is run as soon as our app component is mounted
     componentDidMount() {
         TermStore.addChangeListener(this._onChange);
     };
@@ -119,6 +120,8 @@ class App extends React.Component {
             //self.setState({searchTerm: TermStore.getTerm()});
 
         */
+
+        self.setState({searchTerm: TermStore.getTerm()});
     };
 
 
@@ -126,8 +129,19 @@ class App extends React.Component {
 
         //to add props to children - http://stackoverflow.com/questions/35835670/react-router-and-this-props-children-how-to-pass-state-to-this-props-children
         var children = React.Children.map(this.props.children, function(child){
+            
+            /*
+
             return React.cloneElement(child, {
                 termHandler: self.setSearchTerm,
+                resultsDataHandler: self.setResultsData,
+                searchTerm: self.state.searchTerm,
+                resultsData: self.state.resultsData
+            })
+
+            */
+
+            return React.cloneElement(child, {
                 resultsDataHandler: self.setResultsData,
                 searchTerm: self.state.searchTerm,
                 resultsData: self.state.resultsData

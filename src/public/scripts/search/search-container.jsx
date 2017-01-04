@@ -11,6 +11,10 @@ export default class SearchContainer extends React.Component {
         console.log('Term submitted:' + searchObject.term );
 
 
+        SearchActions.storeSearchTerm(searchObject.term);
+        SearchActions.getSearchResults(searchObject);
+
+
         /*
 
 
@@ -20,6 +24,11 @@ export default class SearchContainer extends React.Component {
 
 
         */ 
+
+
+
+
+        /*
 
 
         this.props.termHandler(searchObject.term); 
@@ -50,6 +59,8 @@ export default class SearchContainer extends React.Component {
                     //console.error(this.props.url, status, err.toString());
                 }.bind(this)
         });
+
+        */
     
     };
 

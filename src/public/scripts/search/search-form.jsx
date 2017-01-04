@@ -37,7 +37,6 @@ export default class SearchForm extends React.Component {
                     <input className="form-control" id="searchTerm" type="text" placeholder="Enter search term here"  value={this.state.term} onChange={this.handleTermChange.bind(this)} />
                 </div>
                 <button type="submit" className="btn btn-default">Search</button>
-
             </form>
 
         );
