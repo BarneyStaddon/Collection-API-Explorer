@@ -6,14 +6,9 @@ var ServerActions = {
     receiveResults: function(response) {
         AppDispatcher.handleAction({
             actionType: 'RECEIVE_RESULTS_RESPONSE',
-            response: response
+            data: response
         });
-
-
-        console.log('reponse received by ServerActions');
     }
-
-
 };
 
 module.exports = ServerActions;

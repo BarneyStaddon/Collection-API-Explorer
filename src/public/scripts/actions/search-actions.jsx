@@ -14,13 +14,13 @@ var SearchActions = {
   	},
 
   	// GET SEARCH TERM RESULTS
-  	getSearchResults: function(searchObject) {
+  	getSearchResults: function(searchObject, resultRoute) {
   		
   		AppDispatcher.handleAction({
       		actionType: 'GET_RESULTS'
     	});
 
-    	CollectionsAPI.searchForTerm(searchObject);
+    	CollectionsAPI.searchForTerm(searchObject, resultRoute);
   	} 
 }
 

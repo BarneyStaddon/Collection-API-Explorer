@@ -2,16 +2,11 @@ import AppDispatcher from '../dispatcher/app-dispatcher.jsx';
 import { EventEmitter } from 'events';
 import objectAssign from 'object-assign';
 
-console.log('termstore loaded');
-
 // Define initial data points
 var term = null;
 
 function loadTermData(data) {
-	console.log('loading some term data');
  	term = data;
-
-  console.log('term is:' + term);
 }
 
 // Add term to store
@@ -43,13 +38,11 @@ AppDispatcher.register(function(payload) {
 
   	switch(action.actionType) {
 
-    	// Respond to STORE_SEARCH_TERM action
     	case "STORE_SEARCH_TERM":
       		loadTermData(action.data);
       	break;
 
-    	// Respond to SOMETHING_ELSE_TO_BE_USED action
-    	case "SOMETHING_ELSE_TO_BE_USED":
+    	case "SOME_OTHER_ACTIONTYPE":
       		loadTermData(action.data);
       	break;
 
@@ -57,7 +50,6 @@ AppDispatcher.register(function(payload) {
       		return true;
   	}
 
-  	// If action was responded to, emit change event
   	TermStore.emitChange();
   	return true;
 

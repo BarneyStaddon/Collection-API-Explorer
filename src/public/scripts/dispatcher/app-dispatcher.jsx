@@ -1,7 +1,5 @@
 import { Dispatcher } from 'flux';
 
-console.log('dispatcher instantiated...');
-
 var AppDispatcher = new Dispatcher();
 
 // Convenience method to handle dispatch requests

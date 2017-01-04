@@ -7,6 +7,7 @@ import ResultsContainer from './results/results-container.jsx';
 import SearchContainer from './search/search-container.jsx';
 
 import TermStore from './stores/term-store.jsx';
+import ResultStore from './stores/result-store.jsx';
 
 
 //see = https://scotch.io/tutorials/creating-a-simple-shopping-cart-with-react-js-and-flux
@@ -65,13 +66,6 @@ class App extends React.Component {
 
     constructor(props){
 
-        /*
-        super(props);
-        this.state = { resultsData:[],
-                       searchTerm:''}; //http://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
-
-        */
-
         super(props);
         this.state = { resultsData:[],
                        searchTerm: TermStore.getTerm()};
@@ -79,49 +73,29 @@ class App extends React.Component {
         self = this;
     };
 
-
-
     // Add change listeners to stores
     // this is run as soon as our app component is mounted
     componentDidMount() {
         TermStore.addChangeListener(this._onChange);
+        ResultStore.addChangeListener(this._onChange);
     };
 
-    // Remove change listers from stores
+    // Remove change listeners from stores
     componentWillUnmount() {
         TermStore.removeChangeListener(this._onChange);
+        ResultStore.removeChangeListener(this._onChange);
     };
 
-    setResultsData(data) {
-
-        console.log('Adding data to root app state...');
-        self.setState({resultsData: data});
-    };
-
-    setSearchTerm(term) {
-
-        console.log('Setting search term to root app state...');
-        self.setState({searchTerm: term});
-    };
-
-    getResultsData() {
-        //self.setState({facetsData: data[1]});
-    };
-
-
+    
     _onChange() {
 
         /* 
-            TO DO - use this when our view adds the term to the term store
-
-            Also, consider using underscore prefix on all custom methods - 
+            TO DO - consider using underscore prefix on all custom methods - 
             https://web-design-weekly.com/2015/01/29/opinionated-guide-react-js-best-practices-conventions/
-
-            //self.setState({searchTerm: TermStore.getTerm()});
-
         */
 
         self.setState({searchTerm: TermStore.getTerm()});
+        self.setState({resultsData: ResultStore.getResult()});
     };
 
 
@@ -129,20 +103,8 @@ class App extends React.Component {
 
         //to add props to children - http://stackoverflow.com/questions/35835670/react-router-and-this-props-children-how-to-pass-state-to-this-props-children
         var children = React.Children.map(this.props.children, function(child){
-            
-            /*
 
             return React.cloneElement(child, {
-                termHandler: self.setSearchTerm,
-                resultsDataHandler: self.setResultsData,
-                searchTerm: self.state.searchTerm,
-                resultsData: self.state.resultsData
-            })
-
-            */
-
-            return React.cloneElement(child, {
-                resultsDataHandler: self.setResultsData,
                 searchTerm: self.state.searchTerm,
                 resultsData: self.state.resultsData
             })
@@ -155,7 +117,7 @@ class App extends React.Component {
                 <div className="content">
                     {children}
                 </div>
-                <footer>&copy;2016</footer>
+                <footer></footer>
             </div>
         );
     };

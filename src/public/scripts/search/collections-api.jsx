@@ -4,7 +4,7 @@ import ServerActions from '../actions/server-actions.jsx';
 var CollectionsAPI = {
 
     // GET SEARCH TERM
-  	searchForTerm: function(searchObject) {
+  	searchForTerm: function(searchObject, resultRoute) {
 
     	/*
       AppDispatcher.handleAction({
@@ -25,6 +25,7 @@ var CollectionsAPI = {
                 console.log(data);
 
                 ServerActions.receiveResults(data);
+                resultRoute('/results');
 
                 //this.props.resultsDataHandler(data);  
                 //this.props.router.push('/results');
