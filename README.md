@@ -9,6 +9,24 @@ This project demonstrates a simple interface built with React using a Flux archi
 ## Installation
 
 ```
-npm init
+npm install
 
 ```
+
+To start the back-end proxy that handles requests for API data (uses nodemon) - see src/server.js
+
+```
+npm start
+
+``` 
+To start the webpack dev server to see the front-end at http://localhost:8080, open another console
+
+```
+npm run start:dev
+
+```
+
+
+
+
+
